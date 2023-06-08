@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,14 @@ Route::group(["prefix"=>"/user"],function(){
 
 }
 );
+Route::group(["prefix"=>"/user/admin"],function(){
+
+    Route::get('/all',[UserController::class,'getAllAdmin']);
+    Route::post('/login',[UserController::class,'adminLogin']);
+    Route::post('/signin',[UserController::class,'adminSignIn']);
+
+}
+);
 
 
 Route::group(["prefix"=>"/brand"],function(){
@@ -47,9 +56,30 @@ Route::group(["prefix"=>"/brand"],function(){
     
    
 });
+Route::group(["prefix"=>"/category"],function(){
+
+    Route::post('/add',[CategoryController::class,'addCategoryName']);
+    Route::get('/all',[CategoryController::class,'allCategoryName']);
+    Route::put('/edit/{id}',[CategoryController::class,'editCategoryName']);
+    Route::delete('/delete/{id}',[CategoryController::class,'deleteCategoryName']);
+
+    Route::post('/sub-brand/add',[CategoryController::class,'addSubCategoryName']);
+    Route::get('/sub-brand/all',[CategoryController::class,'allSubCategoryName']);
+    Route::put('/sub-brand/edit/{id}',[CategoryController::class,'editSubCategoryName']);
+    Route::delete('/sub-brand/delete/{id}',[CategoryController::class,'deleteSubCategoryName']);
+
+    
+   
+});
 
 
 Route::group(["prefix"=>"/advertisement"],function(){
     Route::get('/show',[AdvertisementController::class,'latestAdd']);
-    
+    Route::post('/add',[AdvertisementController::class,'addAdvertisement']);
+    Route::put('/edit/{id}',[AdvertisementController::class,'updateAdd']);
+    Route::get('/details/{id}',[AdvertisementController::class,'details']);
+    Route::get('/search',[AdvertisementController::class,'search']);
+    Route::delete('/delete/{id}',[AdvertisementController::class,'search']);
+
+
 });

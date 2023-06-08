@@ -13,6 +13,12 @@ class UserController extends Controller
             "users" =>[1,2,3,4,5]
         ]);
     }
+    function getAllAdmin(){
+        return collect([
+            "success" => true,
+            "users" =>[1,2,3,4,5]
+        ]);
+    }
 
     function login(Request $request){
     
@@ -25,10 +31,36 @@ class UserController extends Controller
             "message" =>"Login Successfully"
         ]);
     }
+    function adminLogin(Request $request){
+    
+        $request->validate([
+            'email' => ['required','email'],
+            'password' => ['required']
+        ]);
+        return collect([
+            "success" => true,
+            "message" =>"Login Successfully"
+        ]);
+    }
+
 
     function signIn(Request $request){
 
- $request->validate([
+        $request->validate([
+
+            'name' =>'required | max:20',
+            'email' =>'required | email',
+            'password' =>'required | max:20 | min:6',
+            'phone' =>'required | max:11 | min:11'
+        ]);
+
+         return response()->json($request, 400);
+
+    }
+
+    function adminSignIn(Request $request){
+
+        $request->validate([
 
             'name' =>'required | max:20',
             'email' =>'required | email',
