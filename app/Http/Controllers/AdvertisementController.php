@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advertisement;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Mockery\Expectation;
+use PhpParser\Node\Expr\Cast\String_;
+use Psy\Readline\Hoa\Console;
 
 class AdvertisementController extends Controller
 {
@@ -26,7 +31,17 @@ class AdvertisementController extends Controller
 
         ]);
 
-        return response()->json(["message"=>'Addvertisement added Succsfully'], 200);
+        try{
+            
+           $newAdd=new Advertisement();
+           $newAdd->save();
+           return response()->json(["message"=>"Advertisemet added successfully","success"=>true]);
+        }
+        catch(Expectation $e){
+
+            return response()->json(["message"=>'Advertisement Could not be added',"success"=>false], 200);
+        }
+
     }
 
     function updateAdd(Request $request,int $id){
@@ -45,19 +60,49 @@ class AdvertisementController extends Controller
 
         ]);
 
-    return response($request,200);
+        try{
+
+            Advertisement::find($id)->update($request);
+            return response()->json(["message"=>"Update Successful","success"=>true],200);
+
+        }
+        catch(Expectation $e){
+            return response()->json(["message"=>"Update failed","success"=>false],500);
+        }
+
+   
     }
 
     function delete(int $id){
-        return response()->json(["message"=>"Delete successfully","success"=>true],200);
+        try{
+            Advertisement::find($id)->delete();
+        }
+        catch(Expectation $e){
+            return response()->json(["message"=>"Delete Failed","success"=>false],500);
+        }
     }
 
     function details(int $id){
-        return response()->json(["data"=>$id],200);
-    }
-    function search(Request $request){
-        return response()->json([$request],200);
-    }
+        try{
+           $addvertisement= Advertisement::with('user','subCategory.category','subBrand.brand')->find($id);
 
+           return response()->json($addvertisement,200);
+        }
+        catch(Expectation $e){
+            return response()->json(["message"=>"Something went wrong","success"=>false],500);
+        }
+    }
+  
+    function filter(Request $request){
+        try{
+          
+
+        //    return response()->json($res,200);
+        }
+        catch(Expectation $e){
+            return response()->json(["message"=>"Something went wrong","success"=>false],500);
+        }
+    }
+    
     
 }

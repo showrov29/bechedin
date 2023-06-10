@@ -9,10 +9,13 @@ class SubCategory extends Model
 {
     public $table='subCategories';
     public $timestamps=false;
+    use HasFactory;
     public function category(){
         return $this->belongsTo(Category::class,'mainCategoryId','id');
-
         
     }
-    use HasFactory;
+    public function advertisement(){
+        return $this->hasMany(Advertisement::class,'categoryId','id');
+        
+    }
 }

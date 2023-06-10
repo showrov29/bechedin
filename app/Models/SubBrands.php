@@ -16,5 +16,11 @@ class SubBrands extends Model
        return $this->belongsTo(Brand::class,'mainBrandId','id');
         
     }
+   
+
+    public function advertisement(){
+        return $this->hasMany(Advertisement::class,'brandId','id');
+        
+    }
     use HasFactory;
 }
