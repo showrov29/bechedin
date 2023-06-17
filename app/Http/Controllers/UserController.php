@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Str;
 use App\Models\User;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use Mockery\Expectation;
+use Carbon\Carbon;
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -128,12 +131,25 @@ class UserController extends Controller
         ]);
 
         try{
+
             $newUser=new User();
             $newUser->name=$request->name;
             $newUser->email=$request->email;
             $newUser->password=md5($request->password);
             $newUser->phone=$request->phone;
+            $newUser->verification=Str::uuid();
+            
 
+            Mail::raw("http://127.0.0.1:8000/".$newUser->verification,function($message) use ($newUser){
+                $message->to($newUser->email);
+                $message->subject("Verify Your Email");
+            });
+
+            // Mail::raw('hello',function(Message $message){
+            //         $message->to('showrovislam29@gmail.com')
+            //         ->from('abcdhealthcare24@gmail.com');
+            // });
+            
             $newUser->save();
 
             return response()->json(["message" =>"User created successfully","success"=>true],200);
@@ -161,6 +177,8 @@ class UserController extends Controller
             $newAdmin->password=md5($request->password);
             $newAdmin->phone=$request->phone;
             $newAdmin->type='admin';
+            $newAdmin->verification=Str::uuid();
+            $newAdmin->status=true;
             
 
             $newAdmin->save();
@@ -170,5 +188,22 @@ class UserController extends Controller
             return response()->json($e,500);
         }
 
+    }
+
+
+    function verify(string $id){
+
+        try{
+
+           
+
+            $user= User::where('verification','=',$id)->update(['status' => true,'email_verified_at'=>Carbon::now()]);
+           
+            return response()->json(["message" =>"Verified","success"=>true],200);
+
+        }
+        catch(Expectation $e){
+            return response()->json(["messege"=>"Something went wrong"],400);
+        }
     }
 }

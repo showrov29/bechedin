@@ -13,7 +13,8 @@ use Psy\Readline\Hoa\Console;
 class AdvertisementController extends Controller
 {
     function latestAdd(Request $request){
-        return response()->json([1,2,3,4], 200);
+        $addvertisements= Advertisement::paginate(2);
+        return response()->json($addvertisements, 200);
     }
 
     function addAdvertisement(Request $request){
@@ -81,10 +82,18 @@ class AdvertisementController extends Controller
             return response()->json(["message"=>"Delete Failed","success"=>false],500);
         }
     }
+    function approve(int $id){
+        try{
+            Advertisement::find($id)->update(['status'=>true]);
+        }
+        catch(Expectation $e){
+            return response()->json(["message"=>"Delete Failed","success"=>false],500);
+        }
+    }
 
     function details(int $id){
         try{
-           $addvertisement= Advertisement::with('user','subCategory.category','subBrand.brand')->find($id);
+           $addvertisement= Advertisement::where('status','=',true)->with('user','subCategory','subBrand','Brand','Category')->find($id);
 
            return response()->json($addvertisement,200);
         }
@@ -97,7 +106,18 @@ class AdvertisementController extends Controller
         try{
           
 
-        //    return response()->json($res,200);
+            
+            // $brands=collect($request->brandId); 
+            // dd($brands);
+            $results=Advertisement::where('status','=',true)->with('user','Brand','Category','subBrand','subCategory')
+            ->whereIn('mainBrandId',$request->mainBrandId)
+            ->whereIn('mainCategoryId',$request->mainCategoryId)
+            ->whereIn('subCategoryId',$request->subCategoryId)
+            ->whereIn('subBrandId',$request->subBrandId)
+            ->whereBetween('price',[$request->minPrice,$request->maxPrice])
+            ->paginate(15);
+            // $results=Advertisement::all();
+           return response()->json($results,200);
         }
         catch(Expectation $e){
             return response()->json(["message"=>"Something went wrong","success"=>false],500);

@@ -12,4 +12,8 @@ class Category extends Model
     public function subCategory(){
         return $this->hasMany(subCategory::class,'mainCategoryId','id');
     }
+    public function advertisement(){
+        return $this->hasMany(Advertisement::class,'mainCategoryId','id');
+        
+    }
 }

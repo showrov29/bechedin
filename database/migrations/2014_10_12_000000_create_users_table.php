@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->boolean('status')->default(false);
             $table->enum('type',['admin','user'])->default('user');
-            $table->date('email_verified_at')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
         });
     }
 

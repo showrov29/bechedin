@@ -15,9 +15,15 @@ class Advertisement extends Model
         return $this->belongsTo(User::class,'userId','id');
     }
     public function subBrand(){
-        return $this->belongsTo(SubBrands::class,'brandId','id');
+        return $this->belongsTo(SubBrands::class,'subBrandId','id');
     }
     public function subCategory(){
-        return $this->belongsTo(SubCategory::class,'categoryId','id');
+        return $this->belongsTo(SubCategory::class,'subCategoryId','id');
+    }
+    public function Brand(){
+        return $this->belongsTo(Brand::class,'mainBrandId','id');
+    }
+    public function Category(){
+        return $this->belongsTo(Category::class,'mainCategoryId','id');
     }
 }

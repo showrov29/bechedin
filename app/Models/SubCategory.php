@@ -15,7 +15,7 @@ class SubCategory extends Model
         
     }
     public function advertisement(){
-        return $this->hasMany(Advertisement::class,'categoryId','id');
+        return $this->hasMany(Advertisement::class,'subCategoryId','id');
         
     }
 }

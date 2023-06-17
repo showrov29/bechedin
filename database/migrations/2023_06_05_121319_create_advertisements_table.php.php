@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('desImage2')->nullable();
             $table->string('desImage3')->nullable();
             $table->unsignedBigInteger('userId');
-            $table->unsignedBigInteger('categoryId');
-            $table->unsignedBigInteger('brandId');
+            $table->unsignedBigInteger('mainCategoryId');
+            $table->unsignedBigInteger('mainBrandId');
             
 
         });

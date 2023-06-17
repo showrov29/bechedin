@@ -27,6 +27,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(["prefix"=>"/user"],function(){
 
     Route::get('/all',[UserController::class,'getAllUsers']);
+    Route::get('/verify/{id}',[UserController::class,'verify']);
+
     Route::post('/login',[UserController::class,'login']);
     Route::post('/signin',[UserController::class,'signIn']);
     Route::get('/admin/all',[UserController::class,'getAllAdmin']);
@@ -81,8 +83,9 @@ Route::group(["prefix"=>"/category"],function(){
 
 
 Route::group(["prefix"=>"/advertisement"],function(){
-    Route::get('/show',[AdvertisementController::class,'latestAdd']);
     Route::post('/add',[AdvertisementController::class,'addAdvertisement']);
+    Route::get('/show',[AdvertisementController::class,'latestAdd']);
+    Route::put('/approve/{id}',[AdvertisementController::class,'approve']);
     Route::put('/edit/{id}',[AdvertisementController::class,'updateAdd']);
     Route::get('/details/{id}',[AdvertisementController::class,'details']);
     Route::get('/category/{id}',[AdvertisementController::class,'category']);

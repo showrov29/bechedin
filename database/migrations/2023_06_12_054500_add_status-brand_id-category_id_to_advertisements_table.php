@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('advertisements', function (Blueprint $table) {
-            $table->foreign('userId')->references('id')->on('users');
-            $table->foreign('mainCategoryId')->references('id')->on('categories');
-            $table->foreign('mainBrandId')->references('id')->on('brands');
-            
+           $table->boolean('status')->default(false);
+           $table->unsignedBigInteger('subBrandId');
+           $table->unsignedBigInteger('subCategoryId');
+           $table->foreign('subCategoryId')->references('id')->on('subCategories');
+           $table->foreign('subBrandId')->references('id')->on('subBrands');
         });
     }
 
